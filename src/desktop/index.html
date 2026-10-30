@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark"><title>Cineflow Studio</title>
+  <link rel="stylesheet" href="./desktop.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Studio-style menu bar -->
+    <header class="menubar">
+      <div class="brand"><div class="brand-icon">C</div><strong>CINEFLOW</strong></div>
+      <nav class="menus" aria-label="Application menu">
+        <button class="menu-root" data-menu="file">File</button>
+        <button class="menu-root" data-menu="edit">Edit</button>
+        <button class="menu-root" data-menu="view">View</button>
+        <button class="menu-root" data-menu="help">Help</button>
+      </nav>
+      <div class="menubar-right">
+        <div class="project-title"><span class="crumb">PLACE /</span><span id="active-title">Untitled Cutscene</span><span id="dirty-dot" class="dirty-dot" title="Unsaved changes"></span><span id="dirty-label" class="dirty-label hidden">Unsaved</span></div>
+        <span class="studio-status"><i id="studio-dot"></i><span id="studio-status">Studio disconnected</span></span>
+      </div>
+    </header>
+
+    <!-- Studio-style ribbon: grouped tools with captions, like the Home tab -->
+    <div class="ribbon">
+      <div class="ribbon-group">
+        <button id="new-sequence" class="ribbon-button" title="New cutscene"><span class="ribbon-icon">⊞</span><span class="ribbon-text">New</span></button>
+        <button id="open-project" class="ribbon-button" title="Open a cutscene file"><span class="ribbon-icon">▤</span><span class="ribbon-text">Open</span></button>
+        <button id="save-project" class="ribbon-button" title="Save cutscene"><span class="ribbon-icon">▣</span><span class="ribbon-text">Save</span></button>
+        <span class="ribbon-caption">SEQUENCE</span>
+      </div>
+      <span class="ribbon-sep"></span>
+      <div class="ribbon-group">
+        <button id="undo" class="ribbon-button" title="Undo"><span class="ribbon-icon">↶</span><span class="ribbon-text">Undo</span></button>
+        <button id="redo" class="ribbon-button" title="Redo"><span class="ribbon-icon">↷</span><span class="ribbon-text">Redo</span></button>
+        <span class="ribbon-caption">EDIT</span>
+      </div>
+      <span class="ribbon-sep"></span>
+      <div class="ribbon-group">
+        <button id="export-plugin" class="ribbon-button" title="Export the Studio plugin"><span class="ribbon-icon">▧</span><span class="ribbon-text">Plugin</span></button>
+        <button id="calibrate-desktop" class="ribbon-button" title="Reset the camera neutral pose"><span class="ribbon-icon">◎</span><span class="ribbon-text">Neutral</span></button>
+        <span class="ribbon-caption">STUDIO</span>
+      </div>
+      <span class="ribbon-sep"></span>
+      <div class="ribbon-group">
+        <button id="preview-button" class="preview-button"><span class="play-symbol">▶</span> Preview</button>
+        <button id="open-guide" class="ribbon-button" title="How Cineflow works"><span class="ribbon-icon">?</span><span class="ribbon-text">Guide</span></button>
+        <span class="ribbon-caption">PLAY</span>
+      </div>
+    </div>
+
+    <main class="workspace">
+      <section class="editor-column">
+        <!-- Studio animation-editor toolbar strip -->
+        <div class="viewer-toolbar"><div class="view-label"><span class="view-dot"></span> STUDIO PREVIEW <span class="view-divider">/</span> <span id="play-state">EDITING</span></div><span id="transport-note" class="transport-note hidden"></span></div>
+        <div class="viewport">
+          <div class="viewport-grid"></div>
+          <canvas id="preview-canvas" class="preview-canvas"></canvas>
+          <div class="viewport-crosshair"></div>
+          <div class="viewport-caption"><span id="sequence-label">NO ACTIVE TAKE</span><span class="preview-live-tag hidden" id="preview-live"><i></i>STUDIO LIVE</span><span id="viewport-timecode">00:00:00:00</span></div>
+          <div class="viewport-center" id="viewport-placeholder"><div class="camera-outline"></div><span>Live scene preview runs in Roblox Studio</span><small id="viewport-hint">Connect the exported plugin to preview rigs and animations.</small></div>
+          <div class="viewport-bottom"><span><i class="tiny-green"></i> EDITOR VIEW</span><span>16:9 <b>•</b> 30 FPS <b>•</b> ROTATION CAMERA</span></div>
+        </div>
+        <div class="transport">
+          <div class="transport-left"><button class="transport-button" id="to-start" title="Go to start">|◀</button><button class="transport-button" id="step-back" title="Previous frame">◂</button><button class="transport-button play-large" id="transport-play" title="Play preview">▶</button><button class="transport-button" id="step-forward" title="Next frame">▸</button><button class="transport-button" id="to-end" title="Go to end">▶|</button></div>
+          <div class="time-readout"><span id="current-time">00:00:00:00</span><span class="time-slash">/</span><span id="total-time">00:00:00:00</span></div>
+          <div class="transport-right"><button class="transport-button" id="fit-timeline" title="Fit timeline to cutscene (F)">⤢</button><button class="transport-button" id="zoom-out" title="Zoom out">−</button><span id="zoom-label">100%</span><button class="transport-button" id="zoom-in" title="Zoom in">+</button><button class="transport-button snap-toggle active" id="snap-toggle" title="Toggle snapping">⌗</button></div>
+        </div>
+        <section class="timeline-panel">
+          <div class="timeline-heading"><div><h2>Timeline</h2><span class="timeline-subtitle">Arrange performances, camera and triggers</span></div><div class="timeline-head-actions"><label class="snap-check"><input type="checkbox" id="snap-checkbox" checked><span>Snap</span></label><select id="snap-unit" aria-label="Snap interval"><option value="0.1">0.1 s</option><option value="0.25" selected>0.25 s</option><option value="0.5">0.5 s</option><option value="1">1 s</option></select><button id="add-track" class="small-button">＋ Track</button></div></div>
+          <div class="timeline-scroll" id="timeline-scroll">
+            <div class="ruler-row"><div class="track-gutter ruler-gutter"><button id="track-menu" class="menu-dots">•••</button><span>TIME</span></div><div class="ruler" id="ruler"><div class="ruler-ticks" id="ruler-ticks"></div><div class="playhead" id="playhead"><div class="playhead-cap"></div><div class="playhead-line"></div></div></div></div>
+            <div id="track-rows" class="track-rows"></div>
+          </div>
+          <div class="timeline-foot"><span><kbd>Space</kbd> Play/Pause</span><span><kbd>←</kbd> <kbd>→</kbd> Frame step</span><span><kbd>Ctrl</kbd> <kbd>D</kbd> Duplicate clip</span><span><kbd>Alt</kbd> Bypass snap</span><span><kbd>Right-click</kbd> Clip actions</span><span id="selection-summary">No clip selected</span></div>
+        </section>
+      </section>
+
+      <!-- Docked panels: Explorer/Properties style title bars, stacked -->
+      <aside class="side-panel">
+        <section class="side-card project-card"><div class="section-heading"><div class="dock-titles"><span class="eyebrow">CURRENT SEQUENCE</span><h2 id="sequence-name">Untitled Cutscene</h2></div><button id="rename-sequence" class="ellipsis" title="Rename cutscene">···</button></div><div class="sequence-meta"><span><i class="meta-icon">◷</i><span id="duration-meta">0.0 sec</span></span><span><i class="meta-icon">▤</i><span id="clip-count">0 clips</span></span></div><div class="sequence-actions"><button id="sequence-menu" class="small-button">Browse sequences</button></div></section>
+        <section class="side-card assets-card"><div class="section-heading"><div class="dock-titles"><span class="eyebrow">QUICK ADD</span><h2>Timeline tracks</h2></div></div><div class="quick-add-list"><button data-track="animation"><span class="track-icon animation-icon">A</span><span><strong>Animation track</strong><small>Place an animation ID on a rig</small></span><b>＋</b></button><button data-track="camera"><span class="track-icon camera-icon">◉</span><span><strong>Camera track</strong><small>Camera keys and phone takes</small></span><b>＋</b></button><button data-track="trigger"><span class="track-icon trigger-icon">◇</span><span><strong>Trigger track</strong><small>Touch parts and event markers</small></span><b>＋</b></button></div></section>
+        <section class="side-card take-card"><div class="section-heading"><div class="dock-titles"><span class="eyebrow">CAMERA TAKES</span><h2>Recorded motion</h2></div><span id="take-count" class="count-pill">0</span></div><p class="card-copy">Phone Record starts preview and captures an editable camera track.</p><div id="takes-list" class="takes-list"><div class="empty-takes">Record on your phone once Studio is connected</div></div><button id="refresh-takes" class="text-button">Refresh takes ↻</button></section>
+        <section class="side-card"><div class="section-heading"><div class="dock-titles"><span class="eyebrow">PHONE CAMERA</span><h2>Camera link</h2></div><span id="phone-indicator" class="status-tag off"><i></i><span>Offline</span></span></div><p class="card-copy">Optional. Scan the QR with your phone on the same Wi-Fi to aim the Studio camera by hand.</p><div id="qr-placeholder" class="qr-placeholder"><div class="qr-art"><span>▦</span></div><span>1 · Start the bridge to get your QR</span></div><div id="qr-container" class="qr-container hidden"><img id="qr-image" alt="Scan to connect phone"><code id="phone-url"></code></div><button id="bridge-button" class="full-button">Start phone bridge</button><div class="connection-foot"><i id="phone-dot"></i><span id="phone-status">Waiting for bridge</span></div>
+          <details id="phone-secure-setup" class="secure-setup hidden"><summary>First-time phone setup (HTTPS trust)</summary><p>On iPhone, scan the setup QR, install the Cineflow profile, then enable full trust in Settings → General → About → Certificate Trust Settings. Compare the fingerprint before trusting. Afterward scan the camera QR above.</p><div class="setup-qr"><img id="setup-qr-image" alt="Scan to install Cineflow's HTTPS certificate profile"><code id="phone-setup-url"></code></div><small>Local CA SHA-256 fingerprint</small><code id="ca-fingerprint"></code><span class="security-warning">This CA can vouch for HTTPS sites while trusted on your phone. Only trust it if you understand this and are on your own local network.</span></details>
+        </section>
+      </aside>
+    </main>
+    <footer class="app-footer"><span>Local-first • Project files stay on this computer</span><span id="save-location">Cutscenes export as .cineflow.json</span></footer>
+  </div>
+  <div id="menu-dropdown" class="menu-dropdown hidden" role="menu"></div>
+  <div id="context-menu" class="context-menu hidden" role="menu"></div>
+  <div id="toast" class="toast hidden"></div>
+  <div id="drag-ghost" class="drag-ghost hidden"></div>
+  <dialog id="guide-dialog"><form method="dialog" class="dialog-card guide-card"><button class="dialog-close" value="cancel">×</button><span class="eyebrow">GETTING STARTED</span><h2>Make your first cutscene</h2><ol class="guide-steps"><li><strong>Start the phone bridge</strong><span>Right panel → <b>Start phone bridge</b>. This is the local server both Studio and your phone talk to. Allow it through Windows Firewall if prompted.</span></li><li><strong>Connect Studio</strong><span>In Roblox Studio open the <b>Cineflow</b> panel and click <b>Connect to desktop app</b>. The top-right dot turns green when it is live.</span></li><li><strong>Add clips</strong><span>Press <b>＋</b> on a track, or use <b>Quick add</b>. Camera keys take yaw / pitch / roll, animations take a rig name and an animation ID, triggers fire on a part.</span></li><li><strong>Preview</strong><span>Press <b>Preview</b> (or Space) to watch it in Studio. Optional: connect your phone as a handheld camera and record a take with <b>Start take</b>.</span></li></ol><label class="guide-check"><input type="checkbox" id="guide-dismiss"><span>Don't show this automatically again</span></label><button class="full-button" value="cancel">Got it</button></form></dialog>
+  <dialog id="sequence-dialog"><form method="dialog" class="dialog-card"><button class="dialog-close" value="cancel">×</button><span class="eyebrow">SEQUENCES IN THIS SESSION</span><h2>Open cutscene</h2><div id="sequence-list" class="sequence-list"></div><button class="full-button" value="cancel">Done</button></form></dialog>
+  <dialog id="clip-dialog"><form method="dialog" class="dialog-card clip-form"><button class="dialog-close" value="cancel">×</button><span class="eyebrow">TIMELINE CLIP</span><h2 id="clip-dialog-title">Add animation</h2><label>Clip label<input id="clip-label" required value="New clip"></label><div class="form-grid"><label>Start (sec)<input id="clip-start" type="number" min="0" step="0.05" value="0"></label><label>Duration (sec)<input id="clip-duration" type="number" min="0.1" step="0.05" value="2"></label></div><label id="rig-field" class="hidden">Rig name<input id="clip-rig" value="" placeholder="Select/model name"></label><label id="animation-field" class="hidden">Animation ID<input id="clip-asset" value="" placeholder="rbxassetid://..."></label><div id="camera-fields" class="form-grid hidden"><label>Yaw / α°<input id="clip-alpha" type="number" step="1" value="0"></label><label>Pitch / β°<input id="clip-beta" type="number" step="1" value="0"></label><label>Roll / γ°<input id="clip-gamma" type="number" step="1" value="0"></label></div><label id="trigger-field" class="hidden">Trigger part<input id="clip-trigger" value="" placeholder="Workspace part name"></label><label>Easing<select id="clip-easing"><option>Linear</option><option>Quad In</option><option>Quad Out</option><option>Quad InOut</option><option>Sine InOut</option><option>Cubic InOut</option></select></label><div class="dialog-actions"><button id="delete-clip" class="small-button danger hidden" type="button">Delete</button><button class="small-button ghost" value="cancel">Cancel</button><button id="apply-clip" class="full-button" value="save">Save clip</button></div></form></dialog>
+  <script type="module" src="./desktop.js"></script>
+</body>
+</html>

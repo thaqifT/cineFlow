@@ -1,0 +1,23 @@
+{
+  "name": "cineflow-cutscene-studio",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Roblox Studio cutscene editor with a native Tauri and Rust phone motion-camera bridge.",
+  "type": "module",
+  "scripts": {
+    "start": "tauri dev",
+    "dev": "vite --config vite.config.js",
+    "build": "vite build --config vite.config.js",
+    "tauri": "tauri",
+    "check": "npm run check:frontend && cargo check --manifest-path src-tauri/Cargo.toml",
+    "check:frontend": "node --check src/desktop/tauri-bridge.js && node --check src/desktop/desktop.js && node --check src/phone/phone.js",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.8.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.8.0",
+    "vite": "^6.4.1"
+  }
+}

@@ -1,0 +1,27 @@
+[package]
+name = "cineflow-cutscene-studio"
+version = "0.2.0"
+description = "Roblox Studio cutscene editor with a native phone motion-camera bridge"
+authors = ["Cineflow Studio"]
+edition = "2021"
+rust-version = "1.85"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+axum = { version = "0.8", features = ["ws", "json", "query", "tokio"] }
+axum-server = { version = "0.8", features = ["tls-rustls"] }
+base64 = "0.22"
+futures-util = "0.3"
+if-addrs = "0.13"
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+rcgen = { version = "0.14", features = ["pem", "x509-parser"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+subtle = "2.6"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tokio = { version = "1", features = ["fs", "macros", "net", "rt-multi-thread", "sync", "time"] }
+uuid = { version = "1", features = ["v4"] }

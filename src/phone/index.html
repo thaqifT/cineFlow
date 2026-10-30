@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f14"><title>Cineflow Camera</title>
+  <link rel="stylesheet" href="/phone/phone.css">
+</head>
+<body>
+  <main class="shell">
+    <header><div class="brand-mark">C</div><div><p class="eyebrow">CINEFLOW • CAMERA LINK</p><h1>Virtual camera</h1></div><span id="connection" class="pill offline"><i></i>Connecting</span></header>
+    <section class="monitor card">
+      <div class="monitor-grid"></div>
+      <div class="aim"><span></span></div>
+      <div class="monitor-bottom"><span id="phone-state">Awaiting sensor permission</span><span id="angle-readout">—° / —°</span></div>
+      <div class="mode-tag">ROTATION SENSOR</div>
+    </section>
+    <section class="camera-info"><span class="dot"></span><span id="status">Connect to the desktop bridge</span></section>
+    <section class="controls card">
+      <div class="control-row"><div><p class="eyebrow">CAMERA CONTROL</p><h2>Handheld motion</h2></div><span class="badge">LOCAL</span></div>
+      <div id="studio-warning" class="warning hidden">Studio is not connected. Connect the Cineflow plugin before recording.</div>
+      <ol class="steps">
+        <li id="step-sensors" class="step"><span class="step-no">1</span><div class="step-body"><strong>Sensors</strong><small id="sensor-step-note">Needs HTTPS and permission</small></div><button id="enable" class="button secondary compact">Enable</button></li>
+        <li id="step-neutral" class="step"><span class="step-no">2</span><div class="step-body"><strong>Neutral pose</strong><small>Point it where you want zero, then set</small></div><button id="calibrate" class="button secondary compact" disabled>Set</button></li>
+        <li id="step-record" class="step"><span class="step-no">3</span><div class="step-body"><strong>Record a take</strong><small id="record-step-note">Saves to the desktop app</small></div><button id="record" class="button record compact" disabled><span class="record-dot"></span><span>Start</span></button></li>
+      </ol>
+      <p class="hint">Rotation only — the phone's aim steers the Studio camera. Position tracking is not included.</p>
+    </section>
+    <footer><span id="take-status">No take recording</span><span class="secure-note" id="sensor-note">Sensor permission may be required</span></footer>
+  </main>
+  <script src="/phone/phone.js" defer></script>
+</body>
+</html>
